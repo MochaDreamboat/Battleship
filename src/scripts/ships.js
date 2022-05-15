@@ -1,5 +1,4 @@
 // Factory function creates and facilitates ships/their behavior.
-export { ship };
 const ship = (n) => {
 
     const length = n;
@@ -7,11 +6,11 @@ const ship = (n) => {
 
     // Ships represented by 1D array declared by ship's length.
     // 0's represent no-hit, 1's represent hits.
-    function createStructure (length) {
+    function createStructure(length) {
         let body = [];
         for (let i = 0; i < n; i++) {
             body.push(0);
-        } 
+        }
         return body
     };
 
@@ -22,11 +21,16 @@ const ship = (n) => {
 
     // If damage matches length (aka health) of ship, return true.
     const isSunk = () => {
-        let damage = body.reduce((a,b) => a + b, 0);
+        let damage = body.reduce((a, b) => a + b, 0);
         return (damage == length ? true : false)
     };
-    return {length, body, hit, isSunk}
+    return {
+        length,
+        body,
+        hit,
+        isSunk
+    }
 }
 
 // Testing export
-// module.exports = ship;
+module.exports = ship;
