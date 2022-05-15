@@ -13,23 +13,37 @@ const gameBoard = () => {
         J: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
     };
 
-    const placeShip = (length, ...coordinates) => { // Coordinates are an array of pairs in their own arrays.
-        // Instantiate new ship by calling ship()
-        // Coordinates have to be either in the same row or the same array index.
-        let newShip = ship(length);
-        // Overlay hit functions for ship arrays on coordinates.
-        for (let i = 0; i <= coordinates.length; i++) {
-            board.coordinates[0][indexOf[coordinates[1]]] = ship.hit(i);
+    const currentShips = [
+
+    ]
+    // Must reject if:
+    // Coordinates are longer than ship's length.
+    // Coordinates do not have either the same letter or the same number.
+    // Coordinates are not in a consecutive, disjointed order (no diagonals either.)
+    // Coordinates are duplicated.
+
+    const placeShip = (ship, coordinates) => { // Coordinates are an array of pairs in their own arrays.
+        if (ship.length != coordinates.length) {
+            return 'Not valid. Try again!'
+        }
+        for (let i = 0; i <= ship.length - 1; i++) {
+            let hitFunction = () => ship.hit(i);
+            row = coordinates[i][0];
+            column = coordinates[i][1] - 1;
+            board[row][column] = hitFunction;
         }
     };
 
     const receiveAttack = (letterCoordinate, numberCoordinate) => {
-        let coordinate = board.letterCoordinate[numberCoordinate - 1];
+        let coordinate = board[letterCoordinate][numberCoordinate - 1];
         if (typeof coordinate == 'function') {
             coordinate();
+            return 'hit!'
         } else {
             return 'Missed!'
         }
     };
     return { board, placeShip, receiveAttack }
 };
+
+module.exports = gameBoard;
