@@ -13,9 +13,9 @@ const gameBoard = () => {
         J: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
     };
 
-    const currentShips = [
+    const currentShips = [];
+    const misses = [];
 
-    ]
     // Must reject if:
     // Coordinates are longer than ship's length.
     // Coordinates do not have either the same letter or the same number.
@@ -26,6 +26,7 @@ const gameBoard = () => {
         if (ship.length != coordinates.length) {
             return 'Not valid. Try again!'
         }
+        currentShips.push(ship);
         for (let i = 0; i <= ship.length - 1; i++) {
             let hitFunction = () => ship.hit(i);
             row = coordinates[i][0];
@@ -36,14 +37,29 @@ const gameBoard = () => {
 
     const receiveAttack = (letterCoordinate, numberCoordinate) => {
         let coordinate = board[letterCoordinate][numberCoordinate - 1];
+
         if (typeof coordinate == 'function') {
             coordinate();
             return 'hit!'
-        } else {
-            return 'Missed!'
+         } else if (coordinate == 'MISS') {
+            return 'already tried here. Try again.'
+          } else {
+            coordinate = 'MISS';
+            return 'miss!';
         }
-    };
-    return { board, placeShip, receiveAttack }
+    }
+
+    const allSunk = () => {
+        let sunkShips = currentShips.filter(ship => ship.isSunk() == false);
+        (sunkShips.length == 0 ? true : false)
+    }
+
+    return {
+        board,
+        placeShip,
+        receiveAttack,
+        misses
+    }
 };
 
 module.exports = gameBoard;
