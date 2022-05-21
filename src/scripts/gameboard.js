@@ -12,7 +12,6 @@ const gameBoard = () => {
         I: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
         J: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
     };
-
     const currentShips = [];
     const misses = [];
 
@@ -22,13 +21,16 @@ const gameBoard = () => {
     // Coordinates are not in a consecutive, disjointed order (no diagonals either.)
     // Coordinates are duplicated.
 
-    const placeShip = (ship, coordinates) => { // Coordinates are an array of pairs in their own arrays.
-        if (ship.length != coordinates.length) {
+    // Refactor to call ship function
+    const placeShip = (n, coordinates) => { // Coordinates are an array of pairs in their own arrays.
+        let newShip = (ship(n));
+        // Should find a way to validate coordinates from parameters listed above.
+        if (newShip.length != coordinates.length) {
             return 'Not valid. Try again!'
         }
-        currentShips.push(ship);
-        for (let i = 0; i <= ship.length - 1; i++) {
-            let hitFunction = () => ship.hit(i);
+        
+        for (let i = 0; i <= newShip.length - 1; i++) {
+            let hitFunction = () => newShip.hit(i);
             row = coordinates[i][0];
             column = coordinates[i][1] - 1;
             board[row][column] = hitFunction;
@@ -49,6 +51,7 @@ const gameBoard = () => {
         }
     }
 
+    // Incorporate function in game loop.
     const allSunk = () => {
         let sunkShips = currentShips.filter(ship => ship.isSunk() == false);
         (sunkShips.length == 0 ? true : false)
